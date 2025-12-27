@@ -1,92 +1,20 @@
-# task0/task.py
+def show_graph(content):
+    pairs = [item.split(',') for item in content.split('\n')]
 
-from __future__ import annotations
-import csv
-from typing import List, Dict, Union
+    apexes = set([item[0] for item in pairs])#.add([item[1] for item in pairs])
+    apexes.update([item[1] for item in pairs])
+    apexes = sorted(apexes)
 
-Number = Union[int, float]
+    n = len(apexes)
 
-def _maybe_int(x: str) -> Union[int, str]:
-    """Преобразует в int, если возможно."""
-    try:
-        xi = int(x)
-        if str(xi) == x.strip():
-            return xi
-    except ValueError:
-        pass
-    return x
+    matrix = [[0]*n for i in range(n)]
+    
+    for pair in pairs:
+        f_idx = apexes.index(pair[0])
+        s_idx = apexes.index(pair[1])
 
-def adjacency_matrix_from_file(
-    filename: str,
-    directed: bool = False
-) -> List[List[Number]]:
-    """
-    Построить матрицу смежности из CSV-файла.
-
-    Форматы строк:
-      u,v
-      u,v,w  (w — вес ребра; если нет, берётся 1)
-    """
-    edges: list[tuple[Union[int,str], Union[int,str], Number]] = []
-    vertices: set[Union[int,str]] = set()
-
-    with open(filename, newline='', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if not row or row[0].startswith("#"):
-                continue
-            row = [c.strip() for c in row]
-            if len(row) < 2:
-                continue
-
-            u = _maybe_int(row[0])
-            v = _maybe_int(row[1])
-
-            w: Number = 1
-            if len(row) >= 3 and row[2] != "":
-                try:
-                    w = float(row[2])
-                except ValueError:
-                    w = 1
-
-            edges.append((u, v, w))
-            vertices.add(u); vertices.add(v)
-
-    # Порядок вершин
-    nums = sorted([v for v in vertices if isinstance(v, int)])
-    strs = sorted([v for v in vertices if isinstance(v, str)])
-    ordering = nums + strs
-    idx: Dict[Union[int,str], int] = {v: i for i,v in enumerate(ordering)}
-
-    n = len(ordering)
-    matrix: List[List[Number]] = [[0 for _ in range(n)] for _ in range(n)]
-
-    # Заполняем
-    for u, v, w in edges:
-        i, j = idx[u], idx[v]
-        val = int(w) if float(w).is_integer() else float(w)
-        matrix[i][j] += val
-        if not directed:
-            matrix[j][i] += val
+        matrix[f_idx][s_idx] = 1
 
     return matrix
 
-
-# --- Пример использования ---
-def main():
-    """
-    Читает путь к CSV-файлу из argv[1] и печатает матрицу смежности.
-    """
-    import sys
-    if len(sys.argv) < 2:
-        print("Usage: python task0/task.py <graph.csv>")
-        sys.exit(1)
-
-    filename = sys.argv[1]
-    matrix = adjacency_matrix_from_file(filename, directed=False)
-
-    for row in matrix:
-        print(" ".join(str(x) for x in row))
-
-if __name__ == "__main__":
-    main()
+print(show_graph("1,2\n1,3\n3,4\n3,5"))
