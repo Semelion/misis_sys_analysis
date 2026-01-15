@@ -50,7 +50,7 @@ def create_hierarchy_matrix(index_mapping: dict, elements_list: list) -> np.ndar
     return hierarchy_matrix
 
 
-def compare_hierarchies(hierarchy_str1: str, hierarchy_str2: str) -> str:
+def main(hierarchy_str1: str, hierarchy_str2: str) -> str:
     """Сравнивает две иерархии и находит противоречия и упорядоченные кластеры."""
     # Извлекаем все элементы из первой строки
     elements = [item.strip(',[]') for item in hierarchy_str1.split(',')]
@@ -151,7 +151,7 @@ def compare_hierarchies(hierarchy_str1: str, hierarchy_str2: str) -> str:
 # Примеры использования
 hierarchy1 = '[1,[2,3],4,[5,6,7],8,9,10]'
 hierarchy2 = '[[1,2],[3,4,5],6,7,9,[8,10]]'
-print(compare_hierarchies(hierarchy1, hierarchy2))
+print(main(hierarchy1, hierarchy2))
 
 # Дополнительные примеры (закомментированы)
 # hierarchy3 = "[x1,[x2,x3],x4,[x5,x6,x7],x8,x9,x10]"

@@ -18,7 +18,7 @@ def calculate_membership_value(x_coordinate, membership_points):
     return 0.0
 
 
-def fuzzy_controller(temperature_sets_json, control_sets_json, rules_json, current_temperature):
+def main(temperature_sets_json, control_sets_json, rules_json, current_temperature):
     """
     Реализация нечеткого контроллера для управления температурой.
     """
@@ -121,7 +121,7 @@ inference_rules_config = json.dumps([
 
 current_temperature_value = 20.0
 
-control_result = fuzzy_controller(
+control_result = main(
     temperature_sets_config,
     control_sets_config,
     inference_rules_config,
